@@ -1,5 +1,22 @@
-
 import './sass/main.scss';
+import { alert, info, success, error } from '../node_modules/@pnotify/core/dist/PNotify.js';
+import '@pnotify/core/dist/BrightTheme.css';
+//import * as PNotifyMobile from '../node_modules/@pnotify/mobile/dist/PNotifyMobile.js';
+
+
+//defaultModules.set(PNotifyMobile, {});
+
+// error.set(PNotifyMobile, { });
+
+info({
+    text: 'Type here information message'
+  });
+ 
+/*
+  alert({
+    text: 'Notice me, senpai!'
+  });
+*/
 
 const refs = {
     inputRef: document.querySelector('#search'),
