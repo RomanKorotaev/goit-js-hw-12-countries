@@ -25,7 +25,6 @@ const refs = {
     submitBtmRef: document.querySelector('#submitBtm'),
     countryListRef: document.querySelector('.countryList'),
 
-    oneCounryInfoRef: document.querySelector('.oneCounryInfo')
 }
 
 const handlSubmit = (event) => {
@@ -45,38 +44,46 @@ const handlSubmit = (event) => {
 //Назначение функции добавлять и отрисовывать в DOM-элемент то, что получили от бекэнда
 //Для удобства проводим деструктуризацию {name} , чтобы взять из множества ключей, которые есть в объекте, только нужный 
 function createItem({name}) {
-    const result = `<li>${name}</li>`
-    //refs.countryListRef.insertAdjacentHTML("beforeend", result);
-  refs.countryListRef.innerHTML = result;
+  const result = `<li>${name}</li>`
+  
+  // здесь используем именно insertAdjacentHTML, а не innerHTML = result чтобы вывести все элементы цыкла,
+  //а не перезаписывать их друг на друга. Иначе выведет на экран только последний элемент цикла
+  refs.countryListRef.insertAdjacentHTML("beforeend", result); 
+
 }
 
 // Для отрисовки массива данных, которые приходят от бэкенда используем цикл
 function renderColection(arr) {
-  // Если нацдена только одна страна, то выдаём по ней подробную информацию
+  // Если нацдена только одна страна, то выдаём по ней подробную информацию по шаблону oneCountryTpl.hbs
   if (arr.length === 1) {
-    console.log('arr.length === 1')
-    //oneCountryTpl(arr)
-
+    console.log('Найдена одна страна: arr.length === 1')
+   
     const cardsMarkup = createOneCountryItem(arr);
-    //refs.oneCounryInfoRef.insertAdjacentHTML('beforeend', cardsMarkup);
-    refs.oneCounryInfoRef.innerHTML = cardsMarkup;
+    // здесь используем innerHTML , а не insertAdjacentHTML('beforeend', cardsMarkup) чтобы стереть результаты предыдущего поиска
+    refs.countryListRef.innerHTML = cardsMarkup;
+
   }
 
-  if (arr.length > 10) {
-    console.log('arr.length > 10')
-    error({
-    text: 'Too many matches found. Please enter a more specific query! '
-  });
-  }
+  // если находим больше 10 стран, то выкидываем модальное окно с предупреждением
+      if (arr.length > 10) {
+        console.log('Найдено более 10 стран : arr.length > 10')
+        error({
+            text: 'Too many matches found. Please enter a more specific query! '
+          });
+      }
 
-  arr.forEach(el => createItem(el))
-  console.log ( "arr = ", arr)
+  if (arr.length >= 2 && arr.length <= 10) {
+    console.log('arr.length >= 2 && arr.length <= 10')
+    refs.countryListRef.innerHTML = '';// используем innerHTML = '' чтобы стереть результаты предыдущего поиска
+    arr.forEach(el => createItem(el))
+    console.log("arr = ", arr)
+  }
 }
  
 function createOneCountryItem(arr) {
   console.log ( "arr= = ", arr)
-  return arr.map(oneCountryTpl).join('');
-  //refs.countryListRef.insertAdjacentHTML("beforeend", result);
+  return arr.map(oneCountryTpl).join(''); // как написать не через map? Есть ли другоц вариант записи?
+ // return oneCountryTpl(arr);
   
 }
 
