@@ -8,10 +8,11 @@ import oneCountryTpl from './templates/oneCountryTpl.hbs';
 //defaultModules.set(PNotifyMobile, {});
 
 // error.set(PNotifyMobile, { });
-
+/*
 info({
     text: 'Type here information message'
   });
+  */
  
 /*
   alert({
@@ -45,7 +46,8 @@ const handlSubmit = (event) => {
 //Для удобства проводим деструктуризацию {name} , чтобы взять из множества ключей, которые есть в объекте, только нужный 
 function createItem({name}) {
     const result = `<li>${name}</li>`
-    refs.countryListRef.insertAdjacentHTML("beforeend", result);
+    //refs.countryListRef.insertAdjacentHTML("beforeend", result);
+  refs.countryListRef.innerHTML = result;
 }
 
 // Для отрисовки массива данных, которые приходят от бэкенда используем цикл
@@ -56,7 +58,15 @@ function renderColection(arr) {
     //oneCountryTpl(arr)
 
     const cardsMarkup = createOneCountryItem(arr);
-    refs.oneCounryInfoRef.insertAdjacentHTML('beforeend', cardsMarkup);
+    //refs.oneCounryInfoRef.insertAdjacentHTML('beforeend', cardsMarkup);
+    refs.oneCounryInfoRef.innerHTML = cardsMarkup;
+  }
+
+  if (arr.length > 10) {
+    console.log('arr.length > 10')
+    error({
+    text: 'Too many matches found. Please enter a more specific query! '
+  });
   }
 
   arr.forEach(el => createItem(el))
