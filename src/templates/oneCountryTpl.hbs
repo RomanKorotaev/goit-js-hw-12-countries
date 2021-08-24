@@ -1,0 +1,16 @@
+<div class="oneCountryInfo">
+   
+   <b> {{name}} </b> 
+  <div>   
+    <p><b>Capital:</b> {{capital}}</p>
+    <p><b>Population:</b> {{population}}</p>
+        <ul><b>Languages:</b>
+            {{#each languages}}
+            <li>{{this.name}}</li>
+            {{/each}}
+        </ul>
+    </div>
+
+    <img src="{{flag}}" alt="Flaf of {{name}}" class="flag__image" />
+
+</div>

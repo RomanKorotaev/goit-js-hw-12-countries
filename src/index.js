@@ -2,6 +2,7 @@ import './sass/main.scss';
 import { alert, info, success, error } from '../node_modules/@pnotify/core/dist/PNotify.js';
 import '@pnotify/core/dist/BrightTheme.css';
 //import * as PNotifyMobile from '../node_modules/@pnotify/mobile/dist/PNotifyMobile.js';
+import oneCountryTpl from './templates/oneCountryTpl.hbs';
 
 
 //defaultModules.set(PNotifyMobile, {});
@@ -21,7 +22,9 @@ info({
 const refs = {
     inputRef: document.querySelector('#search'),
     submitBtmRef: document.querySelector('#submitBtm'),
-    countryListRef: document.querySelector('.countryList')
+    countryListRef: document.querySelector('.countryList'),
+
+    oneCounryInfoRef: document.querySelector('.oneCounryInfo')
 }
 
 const handlSubmit = (event) => {
@@ -47,14 +50,34 @@ function createItem({name}) {
 
 // Для отрисовки массива данных, которые приходят от бэкенда используем цикл
 function renderColection(arr) {
-    arr.forEach(el => createItem (el))
+  // Если нацдена только одна страна, то выдаём по ней подробную информацию
+  if (arr.length === 1) {
+    console.log('arr.length === 1')
+    //oneCountryTpl(arr)
+
+    const cardsMarkup = createOneCountryItem(arr);
+    refs.oneCounryInfoRef.insertAdjacentHTML('beforeend', cardsMarkup);
+  }
+
+  arr.forEach(el => createItem(el))
+  console.log ( "arr = ", arr)
 }
  
+function createOneCountryItem(arr) {
+  console.log ( "arr= = ", arr)
+  return arr.map(oneCountryTpl).join('');
+  //refs.countryListRef.insertAdjacentHTML("beforeend", result);
+  
+}
 
-
-const countryItem = `
- <p>...</p>
-`
-
+///--------------------
+var debounce = require('lodash.debounce');
+window.addEventListener('click', debounce(onScroll, 500));
+let onScrollCounter = 0;
+function onScroll(event) {
+  onScrollCounter += 1;
+  console.log (' onScrollCounter = ',  onScrollCounter)
+}
+///--------------------
 
 refs.submitBtmRef.addEventListener ("click", handlSubmit)

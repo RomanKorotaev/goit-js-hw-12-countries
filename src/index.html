@@ -21,8 +21,15 @@
   <button type="submit" id="submitBtm">Search</button>
   <ul class="countryList"> Список найденных стран: </ul>
 
+  <!--контейнер для информации, если найжена только одна страна -->
+  <div class="oneCounryInfo"> </div>
+
   <!-- Так добавляются фрагменты в главные HTML-файлы страниц. -->
   <!-- <include src="./partials/example.html"></include> -->
+
+
+  <!--//Чтобы функции _.throttle и _.debounce из библеотеки lodash работали - их нужно подключать ДО своего основного js-файла-->
+  <!--<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>-->
 
   <!-- Скрипт идёт последним в разметке. В нём уже подключен главный SASS-файл. -->
   <script src="./index.js"></script>
