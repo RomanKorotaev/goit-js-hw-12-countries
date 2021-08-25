@@ -16,18 +16,11 @@ const handlSubmit = (event) => {
   console.log('refs.inputRef.value = ', refs.inputRef.value);
   const nameOfCountry = refs.inputRef.value;
 
-function fetchCountries() {
-  error({
-            text: `Backend returned an error!`
-          });
- }
-
-
   // Эндпоинт из задания: https://restcountries.eu/rest/v2/name/{name}
   fetch(`https://restcountries.eu/rest/v2/name/${nameOfCountry}`)
     .then(response => response.json())
     .then(country => renderColection(country))
-    .catch(err =>   console.log('От бекенда пришёл промис с ошибкой! ', err) )
+    .catch(err =>console.log('От бекенда пришёл промис с ошибкой! ', err)  )
 }
 
 //fetchCountries ()
