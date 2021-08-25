@@ -4,41 +4,33 @@ import '@pnotify/core/dist/BrightTheme.css';
 //import * as PNotifyMobile from '../node_modules/@pnotify/mobile/dist/PNotifyMobile.js';
 import oneCountryTpl from './templates/oneCountryTpl.hbs';
 
-
-//defaultModules.set(PNotifyMobile, {});
-
-// error.set(PNotifyMobile, { });
-/*
-info({
-    text: 'Type here information message'
-  });
-  */
- 
-/*
-  alert({
-    text: 'Notice me, senpai!'
-  });
-*/
+var debounce = require('lodash.debounce'); //Эта строка нужна для подключения биьлиотеки с debounce
 
 const refs = {
     inputRef: document.querySelector('#search'),
-    submitBtmRef: document.querySelector('#submitBtm'),
-    countryListRef: document.querySelector('.countryList'),
-
+  countryListRef: document.querySelector('.countryList')
 }
 
 const handlSubmit = (event) => {
-    event.preventDefault();
-    console.log('refs.inputRef.value = ', refs.inputRef.value);
-    const nameOfCountry = refs.inputRef.value;
+  event.preventDefault();
+  console.log('refs.inputRef.value = ', refs.inputRef.value);
+  const nameOfCountry = refs.inputRef.value;
 
-    // Эндпоинт из задания: https://restcountries.eu/rest/v2/name/{name}
-    fetch(`https://restcountries.eu/rest/v2/name/${nameOfCountry}`)
+function fetchCountries() {
+  error({
+            text: `Backend returned an error!`
+          });
+ }
+
+
+  // Эндпоинт из задания: https://restcountries.eu/rest/v2/name/{name}
+  fetch(`https://restcountries.eu/rest/v2/name/${nameOfCountry}`)
     .then(response => response.json())
-    //.then(country => console.log(country))
-    .then(country =>renderColection(country))
-    .catch(err=>console.log('От бекенда пришёл промис с ошибкой! ',err))
+    .then(country => renderColection(country))
+    .catch(err =>   console.log('От бекенда пришёл промис с ошибкой! ', err) )
 }
+
+//fetchCountries ()
 
 // Данная функция получает объект, из которого нам нужен только кльч с именем. 
 //Назначение функции добавлять и отрисовывать в DOM-элемент то, что получили от бекэнда
@@ -54,6 +46,7 @@ function createItem({name}) {
 
 // Для отрисовки массива данных, которые приходят от бэкенда используем цикл
 function renderColection(arr) {
+  
   // Если нацдена только одна страна, то выдаём по ней подробную информацию по шаблону oneCountryTpl.hbs
   if (arr.length === 1) {
     console.log('Найдена одна страна: arr.length === 1')
@@ -61,13 +54,12 @@ function renderColection(arr) {
     const cardsMarkup = createOneCountryItem(arr);
     // здесь используем innerHTML , а не insertAdjacentHTML('beforeend', cardsMarkup) чтобы стереть результаты предыдущего поиска
     refs.countryListRef.innerHTML = cardsMarkup;
-
   }
 
   // если находим больше 10 стран, то выкидываем модальное окно с предупреждением
       if (arr.length > 10) {
         console.log('Найдено более 10 стран : arr.length > 10')
-        error({
+        info({
             text: 'Too many matches found. Please enter a more specific query! '
           });
       }
@@ -81,20 +73,10 @@ function renderColection(arr) {
 }
  
 function createOneCountryItem(arr) {
-  console.log ( "arr= = ", arr)
+  console.log("arr= = ", arr)
   return arr.map(oneCountryTpl).join(''); // как написать не через map? Есть ли другоц вариант записи?
- // return oneCountryTpl(arr);
-  
+ 
 }
 
-///--------------------
-var debounce = require('lodash.debounce');
-window.addEventListener('click', debounce(onScroll, 500));
-let onScrollCounter = 0;
-function onScroll(event) {
-  onScrollCounter += 1;
-  console.log (' onScrollCounter = ',  onScrollCounter)
-}
-///--------------------
 
-refs.submitBtmRef.addEventListener ("click", handlSubmit)
+refs.inputRef.addEventListener("input", debounce(handlSubmit, 500));
