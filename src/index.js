@@ -4,10 +4,19 @@ import '@pnotify/core/dist/BrightTheme.css';
 //import * as PNotifyMobile from '../node_modules/@pnotify/mobile/dist/PNotifyMobile.js';
 import oneCountryTpl from './templates/oneCountryTpl.hbs';
 
+
 var debounce = require('lodash.debounce'); //Эта строка нужна для подключения биьлиотеки с debounce
 
+
+function fetchCountries() {
+          error({
+            text: 'Network error! '
+          });
+        }
+        
+
 const refs = {
-    inputRef: document.querySelector('#search'),
+  inputRef: document.querySelector('#search'),
   countryListRef: document.querySelector('.countryList')
 }
 
@@ -17,13 +26,13 @@ const handlSubmit = (event) => {
   const nameOfCountry = refs.inputRef.value;
 
   // Эндпоинт из задания: https://restcountries.eu/rest/v2/name/{name}
-  fetch(`https://restcountries.eu/rest/v2/name/${nameOfCountry}`)
+  fetch(`https://1restcountries.eu/rest/v2/name/${nameOfCountry}`)
     .then(response => response.json())
-    .then(country => renderColection(country))
-    .catch(err =>console.log('От бекенда пришёл промис с ошибкой! ', err)  )
+    .then(country =>  renderColection(country) )
+    .catch(err => { console.log(' Network error! ', err), fetchCountries () } ) //в спецификации fetch сказано, что туда попадают только network ошибки. То есть связанные с сетью. Например, когда запрос отваливается по таймауту.
+// Если мы хотим отловить обычные ошибки, их нужно обрабатывать в первом блоке .then. И так как мы работаем с промисами, то мы можем их резолвить и реджектить когда хотим
 }
 
-//fetchCountries ()
 
 // Данная функция получает объект, из которого нам нужен только кльч с именем. 
 //Назначение функции добавлять и отрисовывать в DOM-элемент то, что получили от бекэнда
