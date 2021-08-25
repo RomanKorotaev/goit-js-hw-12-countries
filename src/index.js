@@ -26,7 +26,7 @@ const handlSubmit = (event) => {
   const nameOfCountry = refs.inputRef.value;
 
   // Эндпоинт из задания: https://restcountries.eu/rest/v2/name/{name}
-  fetch(`https://1restcountries.eu/rest/v2/name/${nameOfCountry}`)
+  fetch(`https://restcountries.eu/rest/v2/name/${nameOfCountry}`)
     .then(response => response.json())
     .then(country =>  renderColection(country) )
     .catch(err => { console.log(' Network error! ', err), fetchCountries () } ) //в спецификации fetch сказано, что туда попадают только network ошибки. То есть связанные с сетью. Например, когда запрос отваливается по таймауту.
